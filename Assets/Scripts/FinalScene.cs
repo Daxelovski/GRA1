@@ -8,6 +8,7 @@ public class FinalScene : MonoBehaviour
     private void Awake()
     {
         GameSave.ApplyAudioSettings();
+        GameSave.ApplyDisplaySettings();
     }
 
     public void Back()

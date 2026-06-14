@@ -8,6 +8,7 @@ public class DeathScreen : MonoBehaviour
     void Awake()
     {
         GameSave.ApplyAudioSettings();
+        GameSave.ApplyDisplaySettings();
     }
 
     void Start()

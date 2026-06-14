@@ -9,6 +9,7 @@ public class KeyboardControlsMenu : MonoBehaviour
     private void Awake()
     {
         GameSave.ApplyAudioSettings();
+        GameSave.ApplyDisplaySettings();
     }
 
     private void OnGUI()

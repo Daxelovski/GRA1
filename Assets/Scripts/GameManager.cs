@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         GameSave.ApplyAudioSettings();
+        GameSave.ApplyDisplaySettings();
         CacheSceneReferences();
         Find();
         SetEvents();

@@ -43,7 +43,7 @@ public static class GameSave
         set
         {
             PlayerPrefs.SetInt(FullscreenKey, value ? 1 : 0);
-            Screen.fullScreen = value;
+            ApplyDisplaySettings();
         }
     }
 
@@ -165,6 +165,18 @@ public static class GameSave
     public static void ApplyAudioSettings()
     {
         AudioListener.volume = AudioEnabled ? AudioVolume : 0f;
+    }
+
+    public static void ApplyDisplaySettings()
+    {
+        Screen.fullScreen = Fullscreen;
+        ApplyCursorSettings();
+    }
+
+    public static void ApplyCursorSettings()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = Fullscreen ? CursorLockMode.Confined : CursorLockMode.None;
     }
 
     public static int GetUpgradeLevel(UpgradeType type)

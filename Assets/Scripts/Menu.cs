@@ -14,13 +14,15 @@ public class Menu : MonoBehaviour
     [SerializeField] private Slider audioSlider;
     [SerializeField] private bool showShop;
     private const string KeyboardControlsSceneName = "Keyboard Controls";
+    private const string KeyboardControlsButtonName = "Keyboard Controls Button";
 
     void Start()
     {
         GameSave.ApplyAudioSettings();
-        Screen.fullScreen = GameSave.Fullscreen;
+        GameSave.ApplyDisplaySettings();
         RefreshSettingsControls();
         HideShopWindow();
+        WireKeyboardControlsButton();
     }
 
     public void NewGame()
@@ -166,22 +168,44 @@ public class Menu : MonoBehaviour
         }
     }
 
-    private void OnGUI()
+    private void WireKeyboardControlsButton()
     {
-        if(optionsWindow == null || optionsWindow.activeSelf == false)
+        Button keyboardControlsButton = FindKeyboardControlsButton();
+
+        if(keyboardControlsButton == null)
         {
             return;
         }
 
-        GUI.skin.button.fontSize = 18;
+        keyboardControlsButton.onClick = new Button.ButtonClickedEvent();
+        keyboardControlsButton.onClick.AddListener(KeyboardControls);
+    }
 
-        float width = 260f;
-        float height = 45f;
-        Rect buttonRect = new Rect((Screen.width - width) * 0.5f, (Screen.height * 0.5f) + 140f, width, height);
-
-        if(GUI.Button(buttonRect, "Keyboard Controls"))
+    private Button FindKeyboardControlsButton()
+    {
+        if(optionsWindow != null)
         {
-            KeyboardControls();
+            Button[] optionButtons = optionsWindow.GetComponentsInChildren<Button>(true);
+
+            foreach(Button button in optionButtons)
+            {
+                if(button.name == KeyboardControlsButtonName)
+                {
+                    return button;
+                }
+            }
         }
+
+        Button[] allButtons = Resources.FindObjectsOfTypeAll<Button>();
+
+        foreach(Button button in allButtons)
+        {
+            if(button.name == KeyboardControlsButtonName && button.gameObject.scene.IsValid())
+            {
+                return button;
+            }
+        }
+
+        return null;
     }
 }
