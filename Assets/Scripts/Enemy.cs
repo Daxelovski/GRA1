@@ -23,6 +23,11 @@ public class Enemy : MonoBehaviour
         gameManager = GameObject.Find("GAME MANAGER").GetComponent<GameManager>();
     }
 
+    public GameObject GetBulletPrefab()
+    {
+        return bullet;
+    }
+
     void Update()
     {
         Movement();

@@ -11,22 +11,31 @@ public class Score : MonoBehaviour
     void Start()
     {
         Load();
-        scoreText.text = "Score: " + score; 
+        UpdateText();
     }
 
     public void AddScore(int value)
     {
         score += value;
-        scoreText.text = "Score: " + score; 
+        GameSave.Score = score;
+        UpdateText();
     }
 
     private void Load()
     {
-        score = PlayerPrefs.GetInt("Score", 0);
+        score = GameSave.Score;
     }
 
     public void Save()
     {
-        PlayerPrefs.SetInt("Score", score);
+        GameSave.Score = score;
+    }
+
+    private void UpdateText()
+    {
+        if(scoreText != null)
+        {
+            scoreText.text = "Score: " + score;
+        }
     }
 }

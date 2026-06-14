@@ -12,6 +12,7 @@ public class Crystal : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             pickupEvent?.Invoke();
+            Destroy(gameObject);
         }
     }
 }

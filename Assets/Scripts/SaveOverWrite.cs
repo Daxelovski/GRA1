@@ -11,8 +11,9 @@ public class SaveOverWrite : MonoBehaviour
 
     private void OverWrite()
     {
-        PlayerPrefs.SetInt("Score", 0);
-        PlayerPrefs.SetInt("Coins", 0);
-        PlayerPrefs.SetFloat("Health", 100);
+        if(GameSave.ShouldResetRunOnFirstLevel)
+        {
+            GameSave.ResetRunData(false);
+        }
     }
 }

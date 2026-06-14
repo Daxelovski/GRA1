@@ -15,11 +15,23 @@ public class FPS : MonoBehaviour
     {
         Application.targetFrameRate = 0;
         QualitySettings.vSyncCount = 0;
-
+        ApplyVisibility();
     }
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.F3))
+        {
+            GameSave.ShowFps = !GameSave.ShowFps;
+            PlayerPrefs.Save();
+            ApplyVisibility();
+        }
+
+        if(!GameSave.ShowFps)
+        {
+            return;
+        }
+
         time += Time.deltaTime;
         frameCount++;
 
@@ -29,6 +41,21 @@ public class FPS : MonoBehaviour
             text.text = frameRate + " FPS";
             time -= 1f;
             frameCount = 0;
+        }
+    }
+
+    public void ToggleFPS(bool value)
+    {
+        GameSave.ShowFps = value;
+        PlayerPrefs.Save();
+        ApplyVisibility();
+    }
+
+    private void ApplyVisibility()
+    {
+        if(text != null)
+        {
+            text.enabled = GameSave.ShowFps;
         }
     }
 }

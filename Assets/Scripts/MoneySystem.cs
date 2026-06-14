@@ -16,23 +16,33 @@ public class MoneySystem : MonoBehaviour
 
     public void AddCrystals(int value)
     {
-        coins += value;
+        coins = Mathf.Max(0, coins + value);
+        GameSave.Crystals = coins;
         UpdateText();
     }
 
     private void Load()
     {
-        coins = PlayerPrefs.GetInt("Coins", 0);
+        coins = GameSave.Crystals;
         UpdateText();
     }
 
     public void Save()
     {
-        PlayerPrefs.SetInt("Coins", coins);
+        GameSave.Crystals = coins;
+    }
+
+    public void RefreshFromSave()
+    {
+        coins = GameSave.Crystals;
+        UpdateText();
     }
 
     public void UpdateText()
     {
-        coinsText.text = "Crystals: " + coins;
+        if(coinsText != null)
+        {
+            coinsText.text = "Crystals: " + coins;
+        }
     }
 }

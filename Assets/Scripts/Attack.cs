@@ -19,7 +19,7 @@ public class Attack : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyUp("f"))
+        if (InputBindings.GetKeyUp(GameInputAction.Attack))
         {
             if(onCoolDown == false)
             {

@@ -14,9 +14,21 @@ public class Movement : MonoBehaviour
     [SerializeField] private int keyCount;
     [SerializeField] private bool canJump;
     [SerializeField] private float timerJump;
+    [SerializeField] private float jumpPower = 4.5f;
+    [SerializeField] private int maxJumpPresses = 2;
+
+    private float baseSpeed;
+    private float baseMaxSpeed;
+    private bool baseMovementCaptured;
+
+    void Awake()
+    {
+        CaptureBaseMovement();
+    }
 
     void Start()
     {
+        RefreshUpgrades();
         canJump = true;
     }
 
@@ -32,7 +44,12 @@ public class Movement : MonoBehaviour
 
     private void PlayerMovement()
     {
-        velocity.Set(Input.GetAxis("Horizontal") * currentSpeed, rig.velocity.y);
+        if(rig == null)
+        {
+            return;
+        }
+
+        velocity.Set(InputBindings.GetHorizontalRaw() * currentSpeed, rig.velocity.y);
         rig.velocity = velocity;
     }
 
@@ -50,11 +67,13 @@ public class Movement : MonoBehaviour
 
     private void Rotation()
     {
-        if(Input.GetAxis("Horizontal") < 0)
+        float horizontal = InputBindings.GetHorizontalRaw();
+
+        if(horizontal < 0)
         {
             rend.flipX = true;
         }
-        else if(Input.GetAxis("Horizontal") > 0)
+        else if(horizontal > 0)
         {
             rend.flipX = false;
         }
@@ -62,10 +81,10 @@ public class Movement : MonoBehaviour
 
     private void Jump()
     {
-        if(Input.GetKeyDown("space"))
+        if(InputBindings.GetKeyDown(GameInputAction.Jump))
         {
             if(canJump == true)
-            rig.velocity += Vector2.up * 4.5f;
+            rig.velocity += Vector2.up * jumpPower;
         }         
     }
 
@@ -74,6 +93,12 @@ public class Movement : MonoBehaviour
         timer += Time.deltaTime;
         if(timer > 0.25f)
         {
+            if(sprites == null || sprites.Length == 0 || rend == null)
+            {
+                timer = 0;
+                return;
+            }
+
             current ++;
 
             if(current >= sprites.Length)
@@ -90,11 +115,11 @@ public class Movement : MonoBehaviour
     {
         if(canJump == true)
         {
-        if(Input.GetKeyDown("space"))
+        if(InputBindings.GetKeyDown(GameInputAction.Jump))
         {
             keyCount++;
 
-            if(keyCount >= 2)
+            if(keyCount >= maxJumpPresses)
             {
                 canJump = false;
                 timer = 0;
@@ -120,5 +145,24 @@ public class Movement : MonoBehaviour
         canJump = true;
         timerJump = 0;
         keyCount = 0;
+    }
+
+    public void RefreshUpgrades()
+    {
+        CaptureBaseMovement();
+        speed = baseSpeed + GameSave.GetSpeedBonus();
+        maxSpeed = baseMaxSpeed + GameSave.GetSprintBonus();
+    }
+
+    private void CaptureBaseMovement()
+    {
+        if(baseMovementCaptured)
+        {
+            return;
+        }
+
+        baseSpeed = speed;
+        baseMaxSpeed = maxSpeed;
+        baseMovementCaptured = true;
     }
 }

@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class DeathScreen : MonoBehaviour
 {
+    void Awake()
+    {
+        GameSave.ApplyAudioSettings();
+    }
+
     void Start()
     {
         StartCoroutine(Wait());

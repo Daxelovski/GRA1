@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class FinalScene : MonoBehaviour
 {
+    private void Awake()
+    {
+        GameSave.ApplyAudioSettings();
+    }
+
     public void Back()
     {
         SceneManager.LoadScene("Menu");
